@@ -1,34 +1,77 @@
-﻿namespace DbBenchmarks;
+﻿using DbBenchmarks.Benchmarks;
+using DbBenchmarks.Queries;
+using System.Diagnostics;
 
-internal static class TestDataGenerator
+namespace DbBenchmarks;
+
+static class ListExtensions
 {
-    public static void GenerateData()
+    public static T GetRandom<T>(this List<T> items)
     {
-        using (var eshopContext = new EshopContext())
-        {
-            var category = new Category("C1");
-            var product = new Product("P1");
-            var order = new Order(OrderStatus.Created);
-            var customer = new Customer("Jan Novak", "jn@gmail.com");
-
-            eshopContext.Categories.Add(category);
-            eshopContext.Products.Add(product);
-            eshopContext.Orders.Add(order);
-            eshopContext.Customers.Add(customer);
-
-            category.Products.Add(product);
-            order.Products.Add(product);
-            customer.Orders.Add(order);
-
-            eshopContext.SaveChanges();
-        }
+        return items[Random.Shared.Next(items.Count)];
     }
 }
 
 internal class Program
 {
+    static void MeasureData()
+    {
+        var benchmarks = new IDbBenchmark[] { new RawSqlBenchmark(), new EfCoreBenchmark() };
+
+        var stopwatch = new Stopwatch();
+
+        foreach (var benchmark in benchmarks)
+        {
+            Product p = new Product("Name", "Description", 999.99);
+
+            stopwatch.Restart();
+
+            _ = benchmark.GetTop1000Products();
+
+            stopwatch.Stop();
+            Console.WriteLine($"Get top 1000: {stopwatch.ElapsedMilliseconds}");
+
+            stopwatch.Restart();
+
+            benchmark.AddProduct(p);
+
+            stopwatch.Stop();
+            Console.WriteLine($"Add: {stopwatch.ElapsedMilliseconds}");
+
+            stopwatch.Restart();
+
+            benchmark.GetProductById(2000);
+
+            stopwatch.Stop();
+            Console.WriteLine($"Get by ID: {stopwatch.ElapsedMilliseconds}");
+
+            stopwatch.Restart();
+
+            _ = benchmark.GetCheapProducts();
+
+            stopwatch.Stop();
+            Console.WriteLine($"Get cheap: {stopwatch.ElapsedMilliseconds}");
+
+            stopwatch.Restart();
+
+            _ = benchmark.GetCountOfCheapProducts();
+
+            stopwatch.Stop();
+            Console.WriteLine($"Get count: {stopwatch.ElapsedMilliseconds}");
+        }
+    }
+
     static void Main(string[] args)
     {
-        TestDataGenerator.GenerateData();
+        (int thousand, int million) = (1000, 1000000);
+
+        (int categories, int products, int orders, int customers) = (thousand, million, 100 * thousand, thousand);
+        int maxOrderProducts = 10;
+
+        //TestDataManager.GenerateData(categories, products, orders, customers, maxOrderProducts);
+
+        MeasureData();
+
+        //TestDataManager.DeleteData();
     }
 }

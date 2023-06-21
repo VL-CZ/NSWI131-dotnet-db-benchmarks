@@ -12,52 +12,56 @@ static class ListExtensions
     }
 }
 
+class BenchmarkTool
+{
+    private Stopwatch stopwatch = new();
+    private const int repetitions = 10;
+
+    public void Benchmark(Action method, string name)
+    {
+        stopwatch.Restart();
+
+        for (int i = 0; i < repetitions; i++)
+        {
+            method();
+        }
+
+        stopwatch.Stop();
+        Console.WriteLine($"{name}: {stopwatch.ElapsedMilliseconds}");
+    }
+}
+
 internal class Program
 {
     static void MeasureData()
     {
+        var benchmarkTool = new BenchmarkTool();
         var benchmarks = new IDbBenchmark[] { new RawSqlBenchmark(), new EfCoreBenchmark() };
-
-        var stopwatch = new Stopwatch();
 
         foreach (var benchmark in benchmarks)
         {
-            Product p = new Product("Name", "Description", 999.99);
+            Console.WriteLine($"---------- {benchmark.Name} ----------");
 
-            stopwatch.Restart();
+            var product = new Product("Name", "Description", 999.99);
+            int productId = 2000;
 
-            _ = benchmark.GetTop1000Products();
+            var benchmarkMethods = new List<(Action, string)>()
+            {
+                (() => {_ = benchmark.GetTop1000Products();}, "Get top 1000"),
+                (() => {_ = benchmark.GetProductById(productId);}, "Get by ID"),
+                (() => {_ = benchmark.GetTop1000ProductNames();}, "Get product names"),
+                (() => {_ = benchmark.GetCheapProducts();}, "Get cheap"),
+                (() => {_ = benchmark.GetCountOfCheapProducts();}, "Get count of cheap"),
+                (() => {_ = benchmark.GetMinProductPrice();}, "Get min price"),
+                (() => {_ = benchmark.GetTop1000ProductsWithCategories();}, "Get top 1000 with categories"),
+                (() => {_ = benchmark.GetTop1000OrdersWithAllEntitiesLoaded();}, "Get top 1000 with all related entities"),
+                //(() => { benchmark.AddProduct(product);}, "Add product")
+            };
 
-            stopwatch.Stop();
-            Console.WriteLine($"Get top 1000: {stopwatch.ElapsedMilliseconds}");
-
-            stopwatch.Restart();
-
-            benchmark.AddProduct(p);
-
-            stopwatch.Stop();
-            Console.WriteLine($"Add: {stopwatch.ElapsedMilliseconds}");
-
-            stopwatch.Restart();
-
-            benchmark.GetProductById(2000);
-
-            stopwatch.Stop();
-            Console.WriteLine($"Get by ID: {stopwatch.ElapsedMilliseconds}");
-
-            stopwatch.Restart();
-
-            _ = benchmark.GetCheapProducts();
-
-            stopwatch.Stop();
-            Console.WriteLine($"Get cheap: {stopwatch.ElapsedMilliseconds}");
-
-            stopwatch.Restart();
-
-            _ = benchmark.GetCountOfCheapProducts();
-
-            stopwatch.Stop();
-            Console.WriteLine($"Get count: {stopwatch.ElapsedMilliseconds}");
+            foreach ((var method, var name) in benchmarkMethods)
+            {
+                benchmarkTool.Benchmark(method, name);
+            }
         }
     }
 

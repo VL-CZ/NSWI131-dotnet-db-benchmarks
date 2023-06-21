@@ -4,8 +4,9 @@ public class Customer
 {
     public Customer() { }
 
-    public Customer(string fullName, string email)
+    public Customer(int id, string fullName, string email)
     {
+        Id = id;
         FullName = fullName;
         Email = email;
     }
@@ -30,8 +31,9 @@ public class Order
 {
     public Order() { }
 
-    public Order(OrderStatus status)
+    public Order(int id, OrderStatus status)
     {
+        Id = id;
         Status = status;
     }
 
@@ -60,6 +62,11 @@ public class Product
         Id = id;
     }
 
+    public Product(int id, string name, string description, double price, Category category) : this(id, name, description, price)
+    {
+        Category = category;
+    }
+
     public int Id { get; set; }
 
     public string Name { get; set; }
@@ -77,9 +84,9 @@ public class Category
 {
     public Category() { }
 
-    public Category(string name)
+    public Category(int id, string name)
     {
-        Name = name;
+        (Id, Name) = (id, name);
     }
 
     public int Id { get; set; }

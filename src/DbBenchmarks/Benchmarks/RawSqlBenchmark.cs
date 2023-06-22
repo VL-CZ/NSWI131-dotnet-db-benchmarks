@@ -98,7 +98,7 @@ internal class RawSqlBenchmark : IDbBenchmark
         {
             return (int)command.ExecuteScalar();
         }
-        
+
     }
 
     public Product GetProductById(int id)

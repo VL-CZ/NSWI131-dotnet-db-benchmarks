@@ -27,7 +27,10 @@ class BenchmarkTool
         }
 
         stopwatch.Stop();
-        Console.WriteLine($"{name}: {stopwatch.ElapsedMilliseconds}");
+
+        var elapsed = Math.Round(stopwatch.Elapsed.TotalMilliseconds / repetitions, 3);
+
+        Console.WriteLine($"{name}: {elapsed}");
     }
 }
 

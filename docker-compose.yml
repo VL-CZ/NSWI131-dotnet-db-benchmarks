@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  mssql: # MSSQL service
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password01.
+    container_name: mssql
+    ports:
+      - 5555:1433
+    volumes:
+      - ./db/mssql:/var/opt/mssql/data
+
+# Start with `docker compose up`

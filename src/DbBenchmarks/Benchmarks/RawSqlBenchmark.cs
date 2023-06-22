@@ -10,7 +10,10 @@ internal class RawSqlBenchmark : IDbBenchmark
 {
     private DbConnection GetConnection()
     {
+        // SQLite
         return new SqliteConnection($"Data Source={SqliteDbUtils.DbPath}");
+
+        // SQL Server
     }
 
     public string Name { get => "Raw SQL Benchmark"; }

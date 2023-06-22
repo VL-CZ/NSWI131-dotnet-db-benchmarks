@@ -5,7 +5,7 @@ namespace DbBenchmarks;
 
 internal static class TestDataManager
 {
-    public static void GenerateData(IEshopContextFactory eshopContextFactory, int categoryCount, int productCount, int orderCount, int customerCount, int maxOrderProducts)
+    public static void GenerateData(IDbConnectionFactory eshopContextFactory, int categoryCount, int productCount, int orderCount, int customerCount, int maxOrderProducts)
     {
         // generate fake testing data
 
@@ -31,7 +31,7 @@ internal static class TestDataManager
 
         // store the data
 
-        using var eshopContext = eshopContextFactory.GetInstance();
+        using var eshopContext = eshopContextFactory.GetDbContexxtt();
 
         eshopContext.Categories.AddRange(categories);
         eshopContext.Products.AddRange(products);

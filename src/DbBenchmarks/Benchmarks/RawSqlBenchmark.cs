@@ -1,21 +1,33 @@
 ﻿using DbBenchmarks.Common;
 using DbBenchmarks.Queries;
-using DbBenchmarks.Sqlite;
-using Microsoft.Data.Sqlite;
 using System.Data;
 using System.Data.Common;
-using System.Security.Cryptography;
 
 namespace DbBenchmarks.Benchmarks;
 
 internal class RawSqlBenchmark : IDbBenchmark
 {
+    private IDbConnectionFactory dbConnectionFactory;
+    private readonly string top1000Query;
+    private readonly string limit1000Query;
+
+    public RawSqlBenchmark(IDbConnectionFactory dbConnectionFactory)
+    {
+        this.dbConnectionFactory = dbConnectionFactory;
+
+        if (dbConnectionFactory.LimitQuery == LimitQueryType.TopXX)
+        {
+            (top1000Query, limit1000Query) = ("TOP 1000", "");
+        }
+        else
+        {
+            (top1000Query, limit1000Query) = ("", "LIMIT 1000");
+        }
+    }
+
     private DbConnection GetConnection()
     {
-        // SQLite
-        return new SqliteConnection($"Data Source={SqliteDbUtils.DbPath}");
-
-        // SQL Server
+        return dbConnectionFactory.GetConnection();
     }
 
     public string Name { get => "Raw SQL Benchmark"; }
@@ -77,8 +89,16 @@ internal class RawSqlBenchmark : IDbBenchmark
         var command = connection.CreateCommand();
         command.CommandText = "SELECT COUNT(*) FROM Products WHERE Price <= 10";
 
-        long count = (long)command.ExecuteScalar();
-        return (int)count;
+        if (dbConnectionFactory.CastAggregationResultToLong)
+        {
+            long count = (long)command.ExecuteScalar();
+            return (int)count;
+        }
+        else
+        {
+            return (int)command.ExecuteScalar();
+        }
+        
     }
 
     public Product GetProductById(int id)
@@ -112,8 +132,8 @@ internal class RawSqlBenchmark : IDbBenchmark
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = @"SELECT p.Id AS ProductId, p.Name AS ProductName, p.Description, p.Price, c.Id AS CategoryId, c.Name as CategoryName 
-                                FROM Products p JOIN Categories c ON p.CategoryId = c.Id LIMIT 1000";
+        command.CommandText = @$"SELECT {top1000Query} p.Id AS ProductId, p.Name AS ProductName, p.Description, p.Price, c.Id AS CategoryId, c.Name as CategoryName 
+                                FROM Products p JOIN Categories c ON p.CategoryId = c.Id {limit1000Query}";
 
         using var reader = command.ExecuteReader();
 
@@ -145,7 +165,7 @@ internal class RawSqlBenchmark : IDbBenchmark
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Products LIMIT 1000";
+        command.CommandText = $"SELECT {top1000Query} * FROM Products {limit1000Query}";
 
         using var reader = command.ExecuteReader();
 
@@ -167,7 +187,7 @@ internal class RawSqlBenchmark : IDbBenchmark
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT Name FROM Products LIMIT 1000";
+        command.CommandText = $"SELECT {top1000Query} Name FROM Products {limit1000Query}";
 
         using var reader = command.ExecuteReader();
 
@@ -200,7 +220,8 @@ internal class RawSqlBenchmark : IDbBenchmark
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = @"SELECT o.Status, o.Id as OrderId,
+        command.CommandText = @$"SELECT {top1000Query}
+                                    o.Status, o.Id as OrderId,
                                     c.FullName, c.Id AS CustomerId, c.Email, 
                                     p.Id AS ProductId, p.Name AS ProductName, p.Description, p.Price, 
                                     ca.Id AS CategoryId, ca.Name as CategoryName 
@@ -209,7 +230,7 @@ internal class RawSqlBenchmark : IDbBenchmark
                                 INNER JOIN OrderProduct op on o.Id = op.OrdersId
                                 INNER JOIN Products p on op.ProductsId = p.Id
                                 INNER JOIN Categories ca on ca.Id = p.CategoryId 
-                                LIMIT 1000";
+                                {limit1000Query}";
 
         using var reader = command.ExecuteReader();
 

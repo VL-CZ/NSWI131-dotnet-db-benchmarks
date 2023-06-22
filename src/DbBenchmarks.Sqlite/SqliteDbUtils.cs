@@ -11,6 +11,6 @@ public static class SqliteDbUtils
         var binFolder = AppDomain.CurrentDomain.BaseDirectory;
         var rootFolder = Directory.GetParent(binFolder).Parent.Parent.Parent.Parent.Parent.FullName;
 
-        DbPath = Path.Join(rootFolder, "db", DbFileName);
+        DbPath = Path.Join(rootFolder, "db", "sqlite", DbFileName);
     }
 }

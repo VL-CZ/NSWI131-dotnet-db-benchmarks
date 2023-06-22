@@ -1,11 +1,24 @@
 ﻿using DbBenchmarks.Common;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace DbBenchmarks.SqlServer;
 
-public class SqliteEshopContextFactory : IEshopContextFactory
+public class SqlServerDbFactory : IDbConnectionFactory
 {
-    public IEshopContext GetInstance()
+    public string DbName => "SQL Server";
+
+    public LimitQueryType LimitQuery => LimitQueryType.TopXX;
+
+    public bool CastAggregationResultToLong => false;
+
+    public DbConnection GetConnection()
+    {
+        return new SqlConnection(SqlServerDbUtils.ConnectionString);
+    }
+
+    public IEshopContext GetDbContexxtt()
     {
         return new EshopContext();
     }
@@ -27,7 +40,7 @@ public class EshopContext : DbContext, IEshopContext
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
         // SQL Server
-        options.UseSqlServer("Server=localhost,5555;Database=EshopDb;User Id=sa;Password=Password01.;TrustServerCertificate=True");
+        options.UseSqlServer(SqlServerDbUtils.ConnectionString);
     }
 
 

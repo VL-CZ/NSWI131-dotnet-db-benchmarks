@@ -3,6 +3,7 @@ using DbBenchmarks.Common;
 using DbBenchmarks.Sqlite;
 using DbBenchmarks.Queries;
 using System.Diagnostics;
+using DbBenchmarks.SqlServer;
 
 namespace DbBenchmarks;
 
@@ -38,18 +39,15 @@ class BenchmarkTool
 
 internal class Program
 {
-    static void MeasureData()
+    static void MeasureData(IDbConnectionFactory dbConnectionFactory)
     {
-        var sqliteEfFactory = new SqliteEshopContextFactory();
-
         var benchmarkTool = new BenchmarkTool();
-        var benchmarks = new IDbBenchmark[] { new RawSqlBenchmark(), new EfCoreBenchmark(sqliteEfFactory) };
+        var benchmarks = new IDbBenchmark[] { new RawSqlBenchmark(dbConnectionFactory), new EfCoreBenchmark(dbConnectionFactory) };
 
         foreach (var benchmark in benchmarks)
         {
-            Console.WriteLine($"---------- {benchmark.Name} ----------");
+            Console.WriteLine($"---------- {benchmark.Name} - {dbConnectionFactory.DbName} ----------");
 
-            var product = new Product("Name", "Description", 999.99);
             int productId = 2000;
 
             var benchmarkMethods = new List<(Action, string)>()
@@ -62,7 +60,10 @@ internal class Program
                 (() => {_ = benchmark.GetMinProductPrice();}, "Get min price"),
                 (() => {_ = benchmark.GetTop1000ProductsWithCategories();}, "Get top 1000 with categories"),
                 (() => {_ = benchmark.GetTop1000OrdersWithAllEntitiesLoaded();}, "Get top 1000 with all related entities"),
-                //(() => { benchmark.AddProduct(product);}, "Add product")
+                //(() => { 
+                //    var product = new Product("Name", "Description", 999.99); 
+                //    benchmark.AddProduct(product);
+                //}, "Add product")
             };
 
             foreach ((var method, var name) in benchmarkMethods)
@@ -80,12 +81,18 @@ internal class Program
         int maxOrderProducts = 10;
 
         // SQLite
-        //var eshopSqliteFactory = new SqliteEshopContextFactory();
-        //TestDataManager.GenerateData(eshopSqliteFactory, categories, products, orders, customers, maxOrderProducts);
+        //var dbConnectionFactory = new SqliteDbFactory();
 
         // SQL Server
+        //var dbConnectionFactory = new SqlServerDbFactory();
 
-        MeasureData();
+        //TestDataManager.GenerateData(dbConnectionFactory, categories, products, orders, customers, maxOrderProducts);
+
+        var availableDbConnectionFactories = new IDbConnectionFactory[] { new SqliteDbFactory(), new SqlServerDbFactory() };
+        foreach (var dbFactory in availableDbConnectionFactories)
+        {
+            MeasureData(dbFactory);
+        }
 
         //TestDataManager.DeleteData();
     }

@@ -1,13 +1,26 @@
 ﻿using DbBenchmarks.Common;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
 
 namespace DbBenchmarks.Sqlite;
 
-public class SqliteEshopContextFactory : IEshopContextFactory
+public class SqliteDbFactory : IDbConnectionFactory
 {
-    public IEshopContext GetInstance()
+    public string DbName => "SQLite";
+
+    public LimitQueryType LimitQuery => LimitQueryType.LimitXX;
+
+    public bool CastAggregationResultToLong => true;
+
+    public IEshopContext GetDbContexxtt()
     {
         return new EshopContext();
+    }
+
+    public DbConnection GetConnection()
+    {
+        return new SqliteConnection($"Data Source={SqliteDbUtils.DbPath}");
     }
 }
 

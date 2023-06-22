@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
 
 namespace DbBenchmarks.Common;
 
@@ -11,7 +12,18 @@ public interface IEshopContext : IDisposable
     int SaveChanges();
 }
 
-public interface IEshopContextFactory
+public enum LimitQueryType { LimitXX, TopXX }
+
+public interface IDbConnectionFactory
 {
-    IEshopContext GetInstance();
+    IEshopContext GetDbContexxtt();
+
+    DbConnection GetConnection();
+
+    string DbName { get; }
+
+    LimitQueryType LimitQuery { get; }
+
+    bool CastAggregationResultToLong { get; }
+
 }

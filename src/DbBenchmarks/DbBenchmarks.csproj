@@ -23,5 +23,6 @@
   <ItemGroup>
     <ProjectReference Include="..\DbBenchmarks.Common\DbBenchmarks.Common.csproj" />
     <ProjectReference Include="..\DbBenchmarks.Sqlite\DbBenchmarks.Sqlite.csproj" />
+    <ProjectReference Include="..\DbBenchmarks.SqlServer\DbBenchmarks.SqlServer.csproj" />
   </ItemGroup>
 </Project>

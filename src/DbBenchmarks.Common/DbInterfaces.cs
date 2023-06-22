@@ -16,7 +16,7 @@ public enum LimitQueryType { LimitXX, TopXX }
 
 public interface IDbConnectionFactory
 {
-    IEshopContext GetDbContexxtt();
+    IEshopContext GetDbContext();
 
     DbConnection GetConnection();
 

@@ -13,7 +13,7 @@ public class SqliteDbFactory : IDbConnectionFactory
 
     public bool CastAggregationResultToLong => true;
 
-    public IEshopContext GetDbContexxtt()
+    public IEshopContext GetDbContext()
     {
         return new EshopContext();
     }

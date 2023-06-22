@@ -18,7 +18,7 @@ public class SqlServerDbFactory : IDbConnectionFactory
         return new SqlConnection(SqlServerDbUtils.ConnectionString);
     }
 
-    public IEshopContext GetDbContexxtt()
+    public IEshopContext GetDbContext()
     {
         return new EshopContext();
     }

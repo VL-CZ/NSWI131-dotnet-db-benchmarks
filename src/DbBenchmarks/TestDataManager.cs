@@ -31,7 +31,7 @@ internal static class TestDataManager
 
         // store the data
 
-        using var eshopContext = eshopContextFactory.GetDbContexxtt();
+        using var eshopContext = eshopContextFactory.GetDbContext();
 
         eshopContext.Categories.AddRange(categories);
         eshopContext.Products.AddRange(products);

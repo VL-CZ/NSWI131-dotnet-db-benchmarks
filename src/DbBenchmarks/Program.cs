@@ -1,4 +1,6 @@
 ﻿using DbBenchmarks.Benchmarks;
+using DbBenchmarks.Common;
+using DbBenchmarks.Sqlite;
 using DbBenchmarks.Queries;
 using System.Diagnostics;
 
@@ -38,8 +40,10 @@ internal class Program
 {
     static void MeasureData()
     {
+        var sqliteEfFactory = new SqliteEshopContextFactory();
+
         var benchmarkTool = new BenchmarkTool();
-        var benchmarks = new IDbBenchmark[] { new RawSqlBenchmark(), new EfCoreBenchmark() };
+        var benchmarks = new IDbBenchmark[] { new RawSqlBenchmark(), new EfCoreBenchmark(sqliteEfFactory) };
 
         foreach (var benchmark in benchmarks)
         {
@@ -75,7 +79,11 @@ internal class Program
         (int categories, int products, int orders, int customers) = (thousand, million, 100 * thousand, thousand);
         int maxOrderProducts = 10;
 
-        //TestDataManager.GenerateData(categories, products, orders, customers, maxOrderProducts);
+        // SQLite
+        //var eshopSqliteFactory = new SqliteEshopContextFactory();
+        //TestDataManager.GenerateData(eshopSqliteFactory, categories, products, orders, customers, maxOrderProducts);
+
+        // SQL Server
 
         MeasureData();
 

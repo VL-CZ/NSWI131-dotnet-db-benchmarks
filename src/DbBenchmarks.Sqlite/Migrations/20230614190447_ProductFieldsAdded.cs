@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace DbBenchmarks.Migrations;
+namespace DbBenchmarks.Sqlite.Migrations;
 
 /// <inheritdoc />
 public partial class ProductFieldsAdded : Migration

@@ -1,4 +1,6 @@
-﻿using DbBenchmarks.Queries;
+﻿using DbBenchmarks.Common;
+using DbBenchmarks.Queries;
+using DbBenchmarks.Sqlite;
 using Microsoft.Data.Sqlite;
 using System.Data;
 using System.Data.Common;

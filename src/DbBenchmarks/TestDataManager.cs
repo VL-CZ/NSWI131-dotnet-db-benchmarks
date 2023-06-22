@@ -1,10 +1,11 @@
 ﻿using Bogus;
+using DbBenchmarks.Common;
 
 namespace DbBenchmarks;
 
 internal static class TestDataManager
 {
-    public static void GenerateData(int categoryCount, int productCount, int orderCount, int customerCount, int maxOrderProducts)
+    public static void GenerateData(IEshopContextFactory eshopContextFactory, int categoryCount, int productCount, int orderCount, int customerCount, int maxOrderProducts)
     {
         // generate fake testing data
 
@@ -30,7 +31,7 @@ internal static class TestDataManager
 
         // store the data
 
-        using var eshopContext = new EshopContext();
+        using var eshopContext = eshopContextFactory.GetInstance();
 
         eshopContext.Categories.AddRange(categories);
         eshopContext.Products.AddRange(products);
@@ -62,15 +63,15 @@ internal static class TestDataManager
         eshopContext.SaveChanges();
     }
 
-    public static void DeleteData()
-    {
-        using var eshopContext = new EshopContext();
+    //public static void DeleteData()
+    //{
+    //    using var eshopContext = new EshopContext();
 
-        eshopContext.Categories.RemoveRange(eshopContext.Categories);
-        eshopContext.Products.RemoveRange(eshopContext.Products);
-        eshopContext.Orders.RemoveRange(eshopContext.Orders);
-        eshopContext.Customers.RemoveRange(eshopContext.Customers);
+    //    eshopContext.Categories.RemoveRange(eshopContext.Categories);
+    //    eshopContext.Products.RemoveRange(eshopContext.Products);
+    //    eshopContext.Orders.RemoveRange(eshopContext.Orders);
+    //    eshopContext.Customers.RemoveRange(eshopContext.Customers);
 
-        eshopContext.SaveChanges();
-    }
+    //    eshopContext.SaveChanges();
+    //}
 }

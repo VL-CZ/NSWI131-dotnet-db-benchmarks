@@ -1,4 +1,6 @@
-﻿namespace DbBenchmarks.Queries;
+﻿using DbBenchmarks.Common;
+
+namespace DbBenchmarks.Queries;
 
 internal interface IDbBenchmark
 {

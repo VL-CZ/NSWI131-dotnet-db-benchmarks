@@ -1,6 +1,6 @@
-﻿namespace DbBenchmarks;
+﻿namespace DbBenchmarks.Sqlite;
 
-internal static class SqliteDbUtils
+public static class SqliteDbUtils
 {
     public static readonly string DbPath;
 

@@ -9,8 +9,17 @@ public static class SqliteDbUtils
     static SqliteDbUtils()
     {
         var binFolder = AppDomain.CurrentDomain.BaseDirectory;
-        var rootFolder = Directory.GetParent(binFolder).Parent.Parent.Parent.Parent.Parent.FullName;
+        var rootFolder = new DirectoryInfo(binFolder);
 
-        DbPath = Path.Join(rootFolder, "db", "sqlite", DbFileName);
+        int exeDepth = 9;
+
+        for (int i = 0; i < exeDepth; i++)
+        {
+            rootFolder = rootFolder.Parent;
+        }
+
+        Console.WriteLine(rootFolder);
+
+        DbPath = Path.Join(rootFolder.FullName, "db", "sqlite", DbFileName);
     }
 }

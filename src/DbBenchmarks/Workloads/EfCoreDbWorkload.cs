@@ -1,14 +1,13 @@
 ﻿using DbBenchmarks.Common;
-using DbBenchmarks.Queries;
 using Microsoft.EntityFrameworkCore;
 
-namespace DbBenchmarks.Benchmarks;
+namespace DbBenchmarks.Workloads;
 
-internal class EfCoreBenchmark : IDbBenchmark
+internal class EfCoreDbWorkload : IDbWorkload
 {
     private IDbConnectionFactory dbConnectionFactory;
 
-    public EfCoreBenchmark(IDbConnectionFactory dbConnectionFactory)
+    public EfCoreDbWorkload(IDbConnectionFactory dbConnectionFactory)
     {
         this.dbConnectionFactory = dbConnectionFactory;
     }

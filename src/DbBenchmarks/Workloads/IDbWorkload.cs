@@ -1,11 +1,11 @@
 ﻿using DbBenchmarks.Common;
 
-namespace DbBenchmarks.Queries;
+namespace DbBenchmarks.Workloads;
 
-internal interface IDbBenchmark
+internal interface IDbWorkload
 {
     /// <summary>
-    /// Name of the benchmark
+    /// Name of the access method
     /// </summary>
     public string Name { get; }
 
@@ -41,6 +41,12 @@ internal interface IDbBenchmark
     int GetCountOfCheapProducts();
 
     /// <summary>
+    /// Get cheapest product price
+    /// </summary>
+    /// <returns></returns>
+    double GetMinProductPrice();
+
+    /// <summary>
     /// Get names of top 1000 products
     /// </summary>
     /// <returns></returns>
@@ -51,12 +57,6 @@ internal interface IDbBenchmark
     /// </summary>
     /// <returns></returns>
     List<Product> GetTop1000ProductsWithCategories();
-
-    /// <summary>
-    /// Get cheapest product price
-    /// </summary>
-    /// <returns></returns>
-    double GetMinProductPrice();
 
     /// <summary>
     /// Get all orders together with 

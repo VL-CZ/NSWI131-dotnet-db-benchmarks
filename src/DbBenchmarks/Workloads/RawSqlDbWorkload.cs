@@ -1,17 +1,16 @@
 ﻿using DbBenchmarks.Common;
-using DbBenchmarks.Queries;
 using System.Data;
 using System.Data.Common;
 
-namespace DbBenchmarks.Benchmarks;
+namespace DbBenchmarks.Workloads;
 
-internal class RawSqlBenchmark : IDbBenchmark
+internal class RawSqlDbWorkload : IDbWorkload
 {
     private IDbConnectionFactory dbConnectionFactory;
     private readonly string top1000Query;
     private readonly string limit1000Query;
 
-    public RawSqlBenchmark(IDbConnectionFactory dbConnectionFactory)
+    public RawSqlDbWorkload(IDbConnectionFactory dbConnectionFactory)
     {
         this.dbConnectionFactory = dbConnectionFactory;
 

@@ -14,15 +14,6 @@ internal class EfCoreDbWorkload : IDbWorkload
 
     public string Name { get => "EF Core Benchmark"; }
 
-    public void AddProduct(Product product)
-    {
-        using var dbContext = dbConnectionFactory.GetDbContext();
-
-        dbContext.Products.Add(product);
-
-        dbContext.SaveChanges();
-    }
-
     public List<Product> GetTop1000Products()
     {
         using var dbContext = dbConnectionFactory.GetDbContext();

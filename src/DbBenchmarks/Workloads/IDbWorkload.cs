@@ -23,12 +23,6 @@ internal interface IDbWorkload
     Product GetProductById(int id);
 
     /// <summary>
-    /// Add new product
-    /// </summary>
-    /// <param name="product"></param>
-    void AddProduct(Product product);
-
-    /// <summary>
     /// Get products whose price is <= 10 ordered by name
     /// </summary>
     /// <returns></returns>

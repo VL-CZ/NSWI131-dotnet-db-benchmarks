@@ -31,33 +31,6 @@ internal class RawSqlDbWorkload : IDbWorkload
 
     public string Name { get => "Raw SQL Benchmark"; }
 
-    public void AddProduct(Product product)
-    {
-        using DbConnection connection = GetConnection();
-        connection.Open();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Products (Name, Description, Price) VALUES (@Name, @Description, @Price)";
-
-        // add SQL params
-        var parameter1 = command.CreateParameter();
-        parameter1.ParameterName = "@Name";
-        parameter1.Value = product.Name;
-        command.Parameters.Add(parameter1);
-
-        var parameter2 = command.CreateParameter();
-        parameter2.ParameterName = "@Description";
-        parameter2.Value = product.Description;
-        command.Parameters.Add(parameter2);
-
-        var parameter3 = command.CreateParameter();
-        parameter3.ParameterName = "@Price";
-        parameter3.Value = product.Price;
-        command.Parameters.Add(parameter3);
-
-        _ = command.ExecuteNonQuery();
-    }
-
     public List<Product> GetCheapProducts()
     {
         using DbConnection connection = GetConnection();

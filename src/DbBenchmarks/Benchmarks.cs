@@ -231,32 +231,3 @@ public class GetTop1000OrdersWithAllEntitiesLoadedBenchmark
         return efCore.GetTop1000OrdersWithAllEntitiesLoaded();
     }
 }
-
-[AllStatisticsColumn]
-public class AddProductBenchmark
-{
-    private IDbWorkload rawSql;
-    private IDbWorkload efCore;
-
-    public AddProductBenchmark()
-    {
-        var dbFactory = CommonUtils.DbFactory;
-
-        efCore = new EfCoreDbWorkload(dbFactory);
-        rawSql = new RawSqlDbWorkload(dbFactory);
-    }
-
-    [Benchmark(Baseline = true)]
-    public void RawSql()
-    {
-        var product = new Product("Name", "Description", 999.99);
-        rawSql.AddProduct(product);
-    }
-
-    [Benchmark]
-    public void EfCore()
-    {
-        var product = new Product("Name", "Description", 999.99);
-        efCore.AddProduct(product);
-    }
-}

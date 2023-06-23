@@ -36,8 +36,5 @@ internal class Program
         summary = BenchmarkRunner.Run<GetTop1000ProductNamesBenchmark>();
         summary = BenchmarkRunner.Run<GetTop1000ProductsWithCategories>();
         summary = BenchmarkRunner.Run<GetTop1000OrdersWithAllEntitiesLoadedBenchmark>();
-        summary = BenchmarkRunner.Run<AddProductBenchmark>();
-
-        //TestDataManager.DeleteData();
     }
 }

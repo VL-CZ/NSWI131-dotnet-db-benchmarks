@@ -54,14 +54,14 @@ internal class Program
             {
                 (() => {_ = benchmark.GetTop1000Products();}, "Get top 1000"),
                 (() => {_ = benchmark.GetProductById(productId);}, "Get by ID"),
-                (() => {_ = benchmark.GetTop1000ProductNames();}, "Get product names"),
+                (() => {_ = benchmark.GetTop1000ProductNames();}, "Get top 1000 product names"),
                 (() => {_ = benchmark.GetCheapProducts();}, "Get cheap"),
                 (() => {_ = benchmark.GetCountOfCheapProducts();}, "Get count of cheap"),
                 (() => {_ = benchmark.GetMinProductPrice();}, "Get min price"),
                 (() => {_ = benchmark.GetTop1000ProductsWithCategories();}, "Get top 1000 with categories"),
                 (() => {_ = benchmark.GetTop1000OrdersWithAllEntitiesLoaded();}, "Get top 1000 with all related entities"),
-                //(() => { 
-                //    var product = new Product("Name", "Description", 999.99); 
+                //(() => {
+                //    var product = new Product("Name", "Description", 999.99);
                 //    benchmark.AddProduct(product);
                 //}, "Add product")
             };

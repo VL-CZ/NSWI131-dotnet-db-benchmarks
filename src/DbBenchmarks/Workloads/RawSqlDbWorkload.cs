@@ -192,17 +192,18 @@ internal class RawSqlDbWorkload : IDbWorkload
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = @$"SELECT {top1000Query}
-                                    o.Status, o.Id as OrderId,
+        command.CommandText = @$"SELECT o.Status, o.Id as OrderId,
                                     c.FullName, c.Id AS CustomerId, c.Email, 
                                     p.Id AS ProductId, p.Name AS ProductName, p.Description, p.Price, 
                                     ca.Id AS CategoryId, ca.Name as CategoryName 
-                                FROM Orders o
+                                FROM (
+                                    SELECT {top1000Query} * FROM Orders {limit1000Query}
+                                ) AS o
                                 INNER JOIN Customers c on c.Id = o.CustomerId
                                 INNER JOIN OrderProduct op on o.Id = op.OrdersId
                                 INNER JOIN Products p on op.ProductsId = p.Id
                                 INNER JOIN Categories ca on ca.Id = p.CategoryId 
-                                {limit1000Query}";
+                                ";
 
         using var reader = command.ExecuteReader();
 

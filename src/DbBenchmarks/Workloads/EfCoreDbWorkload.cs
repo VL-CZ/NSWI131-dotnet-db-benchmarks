@@ -46,7 +46,7 @@ internal class EfCoreDbWorkload : IDbWorkload
     {
         using var dbContext = dbConnectionFactory.GetDbContext();
 
-        return dbContext.Products.Include(p => p.Category).Take(1000).ToList();
+        return dbContext.Products.Take(1000).Include(p => p.Category).ToList();
     }
 
     public List<string> GetTop1000ProductNames()
@@ -67,8 +67,9 @@ internal class EfCoreDbWorkload : IDbWorkload
     {
         using var dbContext = dbConnectionFactory.GetDbContext();
 
-        return dbContext.Orders.Include(o => o.Customer)
+        return dbContext.Orders.Take(1000)
+            .Include(o => o.Customer)
             .Include(o => o.Products).ThenInclude(p => p.Category)
-            .Take(1000).ToList();
+            .ToList();
     }
 }

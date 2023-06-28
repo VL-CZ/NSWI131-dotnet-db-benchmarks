@@ -16281,7 +16281,7 @@ In order to select DB, set the corresponding value on line 12 in <a href="./src/
 <li>if using SQLite - this can be caused by lower connection overhead (simply connection to embedded DB takes less than connecting to classical DB), so the query execution itself has bigger impact on final duration</li>
 <li>if the query uses JOINs, especially if there are multiple ones (just see the last benchmark).<br />
 Especially, for SQLite the overhead seems to be quite big, so I'd consider using raw SQL or another lower-level ORM (such as <a href="https://github.com/DapperLib/Dapper">Dapper</a>) for these types of queries.<br />
-For SQL Server, single join overhead is quite small, but EF Core query using multiple JOINS is about 2.5 times slower than raw SQL, however should be still fine.</li>
+For SQL Server, single join overhead is quite small, while EF Core query using multiple JOINS is about 2.5 times slower than raw SQL, however should be still fine.</li>
 <li>if the query is fast (like getting entity by its primary key). On the other hand, it shouldn't be a bottleneck in this case, since the query is fast anyway.</li>
 </ul>
 <p>Furthermore, from the graphs, it's clear that the overhead isn't any kind of &quot;constant&quot;, typically the more time the query takes, the higher the absolute overhead is, however relative overhead is often lower.</p>
@@ -16290,9 +16290,9 @@ For SQL Server, single join overhead is quite small, but EF Core query using mul
 <li>while parsing EF Core query into SQL</li>
 <li>while mapping resulting rows to objects</li>
 </ul>
-<p>Also note that, the generated SQL may not be the most effective (see the last benchmark), however it's estimate the possible overhead, because DB engines typically optimize queries before executing.</p>
+<p>Also note that, the generated SQL may not be the most effective (see the last benchmark), however it's hard to estimate the possible overhead, because DB engines typically optimize queries before executing.</p>
 <p>For further details, see also: <a href="https://learn.microsoft.com/en-us/ef/core/performance/#aspects-of-data-access-performance">https://learn.microsoft.com/en-us/ef/core/performance/#aspects-of-data-access-performance</a></p>
-<p>I'd say that in most real-world scenarios (that use client/server DB, such as SQL Server), the ORM overhead is acceptable.
+<p>I'd say that in most real-world scenarios (that use client/server DB, such as SQL Server), <strong>the ORM overhead is definitely acceptable</strong>.
 We also should consider the following points:</p>
 <ul>
 <li>using ORM is much more user-friendly and type-safe</li>
